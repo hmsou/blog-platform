@@ -1,5 +1,6 @@
 package com.hmso.blog.config;
 
+import com.hmso.blog.domain.entities.User;
 import com.hmso.blog.repositories.UserRepository;
 import com.hmso.blog.security.BlogUserDetailsService;
 import com.hmso.blog.security.JwtAuthenticationFilter;
@@ -26,13 +27,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository){
-        return new BlogUserDetailsService(userRepository);
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepository);
+
+        String email = "user@test.com";
+        userRepository.findByEmail(email).orElseGet(() -> {
+            User newUser = User.builder()
+                    .name("Test User")
+                    .email(email)
+                    .password(passwordEncoder().encode("password"))
+                    .build();
+
+            return userRepository.save(newUser);
+        });
+
+        return blogUserDetailsService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception{
+                                                   JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
