@@ -2,14 +2,13 @@ package com.hmso.blog.controllers;
 
 import com.hmso.blog.domain.dtos.PostDto;
 import com.hmso.blog.domain.entities.Post;
+import com.hmso.blog.domain.entities.User;
 import com.hmso.blog.mappers.PostMapper;
 import com.hmso.blog.services.PostService;
+import com.hmso.blog.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +20,7 @@ public class PostController {
 
     private final PostService postService;
     private final PostMapper postMapper;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<PostDto>> listPosts(
@@ -30,5 +30,14 @@ public class PostController {
         List<Post> posts = postService.listPosts(categoryId, tagId);
         List<PostDto> postDtos = posts.stream().map(postMapper::toDto).toList();
         return ResponseEntity.ok(postDtos);
+    }
+
+    @GetMapping(path = "/drafts")
+    public ResponseEntity<List<PostDto>> ListDrafts(@RequestAttribute UUID userId){
+        User user = userService.getUserById(userId);
+        List<Post> draftPosts = postService.listDraftPosts(user);
+        List<PostDto> draftDtos = draftPosts.stream().map(postMapper::toDto).toList();
+
+        return ResponseEntity.ok(draftDtos);
     }
 }

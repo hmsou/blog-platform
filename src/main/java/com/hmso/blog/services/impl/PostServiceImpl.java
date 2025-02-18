@@ -4,6 +4,7 @@ import com.hmso.blog.domain.PostStatus;
 import com.hmso.blog.domain.entities.Category;
 import com.hmso.blog.domain.entities.Post;
 import com.hmso.blog.domain.entities.Tag;
+import com.hmso.blog.domain.entities.User;
 import com.hmso.blog.repositories.PostRepository;
 import com.hmso.blog.services.CategoryService;
 import com.hmso.blog.services.PostService;
@@ -52,5 +53,10 @@ public class PostServiceImpl implements PostService {
         }
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public List<Post> listDraftPosts(User user) {
+        return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
 }
