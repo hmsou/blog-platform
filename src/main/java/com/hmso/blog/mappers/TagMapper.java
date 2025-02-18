@@ -1,6 +1,7 @@
 package com.hmso.blog.mappers;
 
 import com.hmso.blog.domain.PostStatus;
+import com.hmso.blog.domain.dtos.CreateTagRequest;
 import com.hmso.blog.domain.dtos.TagDto;
 import com.hmso.blog.domain.entities.Post;
 import com.hmso.blog.domain.entities.Tag;
@@ -16,6 +17,8 @@ public interface TagMapper {
 
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
     TagDto toDto(Tag tag);
+
+    Tag toEntity(CreateTagRequest createTagRequest);
 
     @Named("calculatePostCount")
     default long calculatePostCount(Set<Post> posts) {
