@@ -1,8 +1,10 @@
 package com.hmso.blog.mappers;
 
 import com.hmso.blog.domain.CreatePostRequest;
+import com.hmso.blog.domain.UpdatePostRequest;
 import com.hmso.blog.domain.dtos.CreatePostRequestDto;
 import com.hmso.blog.domain.dtos.PostDto;
+import com.hmso.blog.domain.dtos.UpdatePostRequestDto;
 import com.hmso.blog.domain.entities.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,4 +19,6 @@ public interface PostMapper {
     PostDto toDto(Post post);
 
     CreatePostRequest toCreatePostRequest(CreatePostRequestDto createPostRequestDto);
+
+    UpdatePostRequest toUpdatePostRequest(UpdatePostRequestDto updatePostRequestDto);
 }

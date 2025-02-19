@@ -1,6 +1,7 @@
 package com.hmso.blog.services;
 
 import com.hmso.blog.domain.CreatePostRequest;
+import com.hmso.blog.domain.UpdatePostRequest;
 import com.hmso.blog.domain.entities.Post;
 import com.hmso.blog.domain.entities.User;
 
@@ -11,4 +12,5 @@ public interface PostService {
     List<Post> listPosts(UUID categoryId, UUID tagId);
     List<Post> listDraftPosts(User user);
     Post createPost(User user, CreatePostRequest createPostRequest);
+    Post updatePost(UUID id, UpdatePostRequest updatePostRequest);
 }

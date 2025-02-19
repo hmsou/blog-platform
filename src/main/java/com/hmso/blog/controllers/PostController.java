@@ -1,8 +1,10 @@
 package com.hmso.blog.controllers;
 
 import com.hmso.blog.domain.CreatePostRequest;
+import com.hmso.blog.domain.UpdatePostRequest;
 import com.hmso.blog.domain.dtos.CreatePostRequestDto;
 import com.hmso.blog.domain.dtos.PostDto;
+import com.hmso.blog.domain.dtos.UpdatePostRequestDto;
 import com.hmso.blog.domain.entities.Post;
 import com.hmso.blog.domain.entities.User;
 import com.hmso.blog.mappers.PostMapper;
@@ -55,6 +57,18 @@ public class PostController {
         PostDto createdPostDto = postMapper.toDto(createPost);
 
         return new ResponseEntity<>(createdPostDto, HttpStatus.CREATED);
+
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePostRequestDto updatePostRequestDto){
+
+        UpdatePostRequest updatePostRequest = postMapper.toUpdatePostRequest(updatePostRequestDto);
+        Post updatePost = postService.updatePost(id, updatePostRequest);
+        PostDto updatedPostDto = postMapper.toDto(updatePost);
+        return ResponseEntity.ok(updatedPostDto);
 
     }
 }
