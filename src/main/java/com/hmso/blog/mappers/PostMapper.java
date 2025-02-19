@@ -1,5 +1,7 @@
 package com.hmso.blog.mappers;
 
+import com.hmso.blog.domain.CreatePostRequest;
+import com.hmso.blog.domain.dtos.CreatePostRequestDto;
 import com.hmso.blog.domain.dtos.PostDto;
 import com.hmso.blog.domain.entities.Post;
 import org.mapstruct.Mapper;
@@ -13,4 +15,6 @@ public interface PostMapper {
     @Mapping(target = "category", source = "category")
     @Mapping(target = "tags", source = "tags")
     PostDto toDto(Post post);
+
+    CreatePostRequest toCreatePostRequest(CreatePostRequestDto createPostRequestDto);
 }

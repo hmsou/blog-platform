@@ -1,12 +1,16 @@
 package com.hmso.blog.controllers;
 
+import com.hmso.blog.domain.CreatePostRequest;
+import com.hmso.blog.domain.dtos.CreatePostRequestDto;
 import com.hmso.blog.domain.dtos.PostDto;
 import com.hmso.blog.domain.entities.Post;
 import com.hmso.blog.domain.entities.User;
 import com.hmso.blog.mappers.PostMapper;
 import com.hmso.blog.services.PostService;
 import com.hmso.blog.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +43,18 @@ public class PostController {
         List<PostDto> draftDtos = draftPosts.stream().map(postMapper::toDto).toList();
 
         return ResponseEntity.ok(draftDtos);
+    }
+
+    @PostMapping
+    public ResponseEntity<PostDto> createPost(
+            @Valid @RequestBody CreatePostRequestDto createPostRequestDto,
+            @RequestAttribute UUID userId){
+        User user = userService.getUserById(userId);
+        CreatePostRequest createPostRequest = postMapper.toCreatePostRequest(createPostRequestDto);
+        Post createPost = postService.createPost(user, createPostRequest);
+        PostDto createdPostDto = postMapper.toDto(createPost);
+
+        return new ResponseEntity<>(createdPostDto, HttpStatus.CREATED);
+
     }
 }
